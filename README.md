@@ -152,17 +152,40 @@ After running `npm run seed`:
 
 The frontend and backend are deployed separately due to their different runtime requirements.
 
-**Frontend (Vercel):**
-- Vite-built static SPA served via Vercel's edge network.
-- No server-side logic — all API calls are proxied to the backend.
-- Set `VITE_API_URL` to your backend's public URL (e.g. `https://your-app.onrender.com/api`).
+### 1. Deploy Backend (Render / Railway / Fly.io)
 
-**Backend (Render / Railway / similar):**
-- Must run on persistent infrastructure (not Vercel serverless) because it uses:
-  - **Socket.io** — requires a long-lived process with in-memory state for WebSocket connections.
-  - **Multer disk uploads** — files are written to the local filesystem (use S3/R2 in production).
-- Set `CLIENT_URL` to your Vercel frontend domain for CORS.
-- Set `NODE_ENV=production` and ensure `JWT_SECRET` is at least 32 characters.
+Deploy the `/backend` folder to a persistent host (e.g., Render Web Service or Railway App).
+
+Configure these Environment Variables on your backend host:
+
+```env
+NODE_ENV=production
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_64_char_jwt_secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+CLIENT_URL=https://your-frontend-app.vercel.app
+```
+
+> **Note:** The backend must run on persistent infrastructure (not Vercel serverless) because it uses:
+> - **Socket.io** — requires a long-lived process with in-memory state for WebSocket connections.
+> - **Multer disk uploads** — files are written to the local filesystem (use S3/R2 in production).
+
+### 2. Deploy Frontend (Vercel)
+
+1. Import your GitHub repository into Vercel.
+2. Set **Root Directory** to `frontend`.
+3. **Framework Preset** will auto-detect as Vite.
+
+Configure these Environment Variables in Vercel:
+
+```env
+VITE_API_URL=https://your-backend-app.onrender.com/api
+VITE_GOOGLE_CLIENT_ID=your-google-client-id
+```
+
+Click **Deploy**.
 
 ## Known Limitations
 
