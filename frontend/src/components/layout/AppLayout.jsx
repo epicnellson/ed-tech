@@ -187,7 +187,7 @@ export default function AppLayout() {
                   className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg w-80 hover:bg-gray-200 transition-colors"
                 >
                   <Search className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-500">Search courses... (⌘K)</span>
+                  <span className="text-sm text-gray-500">Search courses... (Ctrl+K)</span>
                 </button>
               </div>
 

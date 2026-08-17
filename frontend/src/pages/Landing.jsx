@@ -46,9 +46,13 @@ export default function Landing() {
         </div>
         <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
           <img
+            loading="lazy"
             className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
             src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
             alt="Students learning"
+            onError={(e) => {
+              e.target.style.display = 'none'
+            }}
           />
         </div>
       </div>
@@ -171,7 +175,7 @@ export default function Landing() {
           </div>
           <div className="mt-8 md:mt-0 md:order-1">
             <p className="text-center text-base text-gray-400">
-              &copy; 2024 Ed-Tech. All rights reserved.
+              &copy; {new Date().getFullYear()} Ed-Tech. All rights reserved.
             </p>
           </div>
         </div>

@@ -147,9 +147,9 @@ export default function Dashboard() {
               color="yellow"
             />
             <StatCard 
-              icon={PlayCircle} 
-              label="Total Hours" 
-              value="12.5"
+              icon={Clock} 
+              label="Active Courses" 
+              value={inProgressCount}
               color="purple"
             />
           </>
@@ -176,7 +176,7 @@ export default function Dashboard() {
             <StatCard 
               icon={FileText} 
               label="Assignments" 
-              value={teacherStats?.assignmentsCount || "8"}
+              value={teacherStats?.assignmentsCount || 0}
               color="purple"
             />
           </>

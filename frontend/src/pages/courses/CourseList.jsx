@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { BookOpen, Search } from 'lucide-react';
 import { courseApi } from '../../api/courseApi';
+import { EmptyState } from '../../components/ui/EmptyState';
 
 export default function CourseList() {
   const [page, setPage] = useState(1);
@@ -33,16 +35,19 @@ export default function CourseList() {
 
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <input
-          type="text"
-          placeholder="Search courses..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          className="input flex-1"
-        />
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search courses..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="input pl-10 w-full"
+          />
+        </div>
         <select
           value={category}
           onChange={(e) => {
@@ -70,9 +75,11 @@ export default function CourseList() {
           ))}
         </div>
       ) : courses.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No courses found.</p>
-        </div>
+        <EmptyState
+          icon={BookOpen}
+          title="No courses found"
+          description={search || category ? "Try adjusting your search or filters." : "No courses are available yet."}
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
@@ -81,16 +88,17 @@ export default function CourseList() {
               to={`/courses/${course._id}`}
               className="card hover:shadow-md transition-shadow"
             >
-              <div className="h-40 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+              <div className="h-40 bg-gray-100 rounded-lg mb-4 overflow-hidden">
                 {course.thumbnail ? (
                   <img
                     src={course.thumbnail}
                     alt={course.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-4xl">
-                    📚
+                  <div className="w-full h-full flex items-center justify-center">
+                    <BookOpen className="w-8 h-8 text-gray-300" />
                   </div>
                 )}
               </div>
