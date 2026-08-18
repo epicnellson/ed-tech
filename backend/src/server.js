@@ -22,8 +22,19 @@ const server = http.createServer(app);
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+function normalizeOrigin(url) {
+  if (!url) return '';
+  url = url.trim();
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  return url.replace(/\/+$/, '');
+}
+
+const allowedOrigin = isProduction ? normalizeOrigin(process.env.CLIENT_URL) : true;
+
 const corsOptions = {
-  origin: isProduction ? process.env.CLIENT_URL : true,
+  origin: allowedOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
   credentials: true
