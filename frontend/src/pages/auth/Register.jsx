@@ -40,7 +40,7 @@ export default function Register() {
     try {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
-        callback: handleCredentialResponse,
+        callback: (resp) => callbackRef.current(resp),
         auto_select: false,
         cancel_on_tap_outside: false,
         context: 'signup',
@@ -48,10 +48,11 @@ export default function Register() {
       });
 
       if (googleButtonRef.current) {
+        googleButtonRef.current.innerHTML = '';
         window.google.accounts.id.renderButton(googleButtonRef.current, {
           theme: 'outline',
           size: 'large',
-          width: '100%',
+          width: 320,
           text: 'signup_with',
           shape: 'rectangular',
           logo_alignment: 'left',
@@ -75,6 +76,9 @@ export default function Register() {
       setError(result.error || 'Google sign-up failed. Please try again.');
     }
   };
+
+  const callbackRef = useRef(handleCredentialResponse);
+  callbackRef.current = handleCredentialResponse;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

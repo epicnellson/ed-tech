@@ -35,6 +35,9 @@ export default function Login() {
     }
   }, [googleLogin, navigate]);
 
+  const callbackRef = useRef(handleCredentialResponse);
+  callbackRef.current = handleCredentialResponse;
+
   useEffect(() => {
     const checkGoogle = setInterval(() => {
       if (window.google?.accounts?.id) {
@@ -54,7 +57,7 @@ export default function Login() {
     try {
       window.google.accounts.id.initialize({
         client_id: googleClientId,
-        callback: handleCredentialResponse,
+        callback: (resp) => callbackRef.current(resp),
         auto_select: false,
         cancel_on_tap_outside: false,
         context: 'signin',
@@ -62,10 +65,11 @@ export default function Login() {
       });
 
       if (googleButtonRef.current) {
+        googleButtonRef.current.innerHTML = '';
         window.google.accounts.id.renderButton(googleButtonRef.current, {
           theme: 'outline',
           size: 'large',
-          width: '100%',
+          width: 320,
           text: 'signin_with',
           shape: 'rectangular',
           logo_alignment: 'left',
@@ -74,7 +78,7 @@ export default function Login() {
     } catch (err) {
       console.error('Google init error:', err);
     }
-  }, [googleReady, handleCredentialResponse]);
+  }, [googleReady]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
